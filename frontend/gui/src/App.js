@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import CustomLayout from "./containers/Layout";
-import ArticleList from "./containers/ArticleListView";
 import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
 import { BrowserRouter as Router } from "react-router-dom";
 import BaseRouter from "./routes";

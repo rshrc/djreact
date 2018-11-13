@@ -1,4 +1,6 @@
-{% load static %} <!DOCTYPE html>
+{% load blog_tags %}
+{% load static %}
+<!DOCTYPE html>
 <html>
 <head>
     <title>{% block title %}{% endblock %}</title>
@@ -8,8 +10,21 @@
 <body>
 <div id="content">{% block content %} {% endblock %}</div>
 <div id="sidebar">
+
     <h2>Blog Engine</h2>
     <p>A Django Blog Engine</p>
+    <p>This Blog has {% total_posts %} posts so far.</p>
+    <h3>Latest Posts</h3>
+    {% show_latest_posts %}
+    <h3>Most Commented Posts</h3>
+    {% get_most_commented_posts as most_commented_posts %}
+    <ul>
+        {% for post in most_commented_posts %}
+            <li>
+                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
 </div>
 </body>
 </html>

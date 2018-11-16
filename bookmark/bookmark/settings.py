@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'social_django',
     'images',
     'sslserver',
+    'sorl.thumbnail',
 ]
 
 AUTHENTICATION_BACKENDS = [

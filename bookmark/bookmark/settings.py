@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'images',
     'sslserver',
     'sorl.thumbnail',
+    'actions',
 ]
 
 AUTHENTICATION_BACKENDS = [

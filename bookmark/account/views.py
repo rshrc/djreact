@@ -6,7 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.views.decorators.http import require_POST
-
+from actions.utils import create_action
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
 from .models import Contact
 
@@ -45,6 +45,7 @@ def register(request):
             new_user.set_password(user_form.cleaned_data['password'])
             # Save the User Object
             new_user.save()
+            create_action(new_user, ' has created an account')
             return render(request, 'account/register_done.html', {'new_user': new_user})
         else:
             user_form = UserRegistrationForm()
@@ -95,6 +96,7 @@ def user_follow(request):
                     user_from=request.user,
                     user_to=user
                 )
+                create_action(request.user, ' is following', user)
             else:
                 Contact.objects.filter(user_from=request.user, user_to=user).delete()
 

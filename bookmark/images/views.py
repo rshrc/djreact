@@ -1,15 +1,21 @@
+import redis
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
-from django.http import HttpResponse
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from actions.utils import create_action
 from common.decorators import ajax_required
 from .forms import ImageCreationForm
-from actions.utils import create_action
 from .models import Image
+
+# connect to redis
+r = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB)
 
 
 # Create your views here.
@@ -35,7 +41,11 @@ def image_like(request):
 
 def image_detail(request, id, slug):
     image = get_object_or_404(Image, id=id, slug=slug)
-    return render(request, 'images/image/detail.html', {'section': 'images', 'image': image})
+
+    # increment total image views by 1
+    total_views = r.incr('image:{}:views'.format(image.id))
+
+    return render(request, 'images/image/detail.html', {'section': 'images', 'image': image, 'total_views': total_views})
 
 
 @login_required
@@ -50,7 +60,7 @@ def image_create(request):
             # assign current user to the item
             new_item.user = request.user
             new_item.save()
-            create_action(request.user ,'likes', new_item)
+            create_action(request.user, 'likes', new_item)
             messages.success(request, 'Image added successfully')
 
             # redirect to the new created item detail view

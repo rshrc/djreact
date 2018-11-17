@@ -1,4 +1,5 @@
 import os
+
 from django.urls import reverse_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -132,3 +133,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 SOCIAL_AUTH_FACEBOOK_KEY = '323337508466295'
 SOCIAL_AUTH_FACEBOOK_SECRET = '97b4925917e3feee135ad25d33173bc3'
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0
